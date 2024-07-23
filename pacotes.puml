@@ -1,0 +1,75 @@
+@startuml
+
+package com.educaguard.api.controllers.login {
+}
+package com.educaguard.domain.services {
+}
+package com.educaguard.domain.services.impl {
+}
+package com.educaguard.api.dto.login {
+}
+package com.educaguard.api.mapper {
+}
+package com.educaguard.api.others {
+}
+package com.educaguard.domain.repository {
+}
+package com.educaguard.domain.services.impl {
+}
+package com.educaguard.api.dto.user {
+}
+package com.educaguard.utils {
+}
+package com.educaguard.security.jwt {
+}
+package com.educaguard.api.apiException {
+}
+package com.educaguard.api.dto.user {
+}
+package com.educaguard.utils {
+}
+package com.educaguard.domain.models {
+}
+package com.educaguard.security {
+}
+package com.educaguard.utils {
+}
+package com.educaguard.domain.services {
+}
+package com.educaguard {
+}
+package com.educaguard.domain.domainException {
+}
+package com.educaguard.api.dto.login {
+}
+package com.educaguard.domain.domainException {
+}
+package com.educaguard.security {
+}
+package com.educaguard {
+}
+package com.educaguard.api.mapper {
+}
+package com.educaguard.api.dto.password {
+}
+package com.educaguard.utils {
+}
+package com.educaguard.api.apiException {
+}
+package com.educaguard.utils {
+}
+package com.educaguard.api.controllers.recoverAccount {
+}
+package com.educaguard.domain.enums {
+}
+
+package com.educaguard.domain.services.impl {
+}
+package com.educaguard.api.apiException {
+}
+package com.educaguard.domain.domainException {
+}
+
+apiException -[hidden]-> domainException
+
+@enduml

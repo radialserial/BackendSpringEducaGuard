@@ -1,0 +1,57 @@
+@startuml
+
+class api.controllers.login.LoginController {
+- UserService service
++ AuthenticationManager authenticationManager
+- int MAX_ATTEMPTS
++ ResponseEntity<?> enter(LoginInputDTO,HttpServletRequest)
+- ResponseEntity<?> processLogin(LoginInputDTO)
+}
+
+
+class api.dto.login.LoginInputDTO {
+- String username
+- String password
+}
+
+
+class api.dto.login.LoginOutputDTO {
+- Long idUser
+- String token
+- Roles role
+}
+
+class api.dto.user.UserOutputDTO {
+- Long idUser
+- String name
+- String about
+- String image
+- Roles role
+}
+
+class api.dto.password.NewPasswordInputDTO {
+- String token
+- String newpassword
+}
+
+
+class api.dto.user.UserInputDTO {
+- String name
+- String username
+- String password
+- String about
+- String email
+- String image
+}
+
+
+class api.controllers.recoverAccount.RecoverAccountController {
+- EmailSenderService emailSenderService
+- UserService userService
++ ResponseEntity<Message> recoverAccount(String)
++ ResponseEntity<Message> newPassword(NewPasswordInputDTO)
+}
+
+
+
+@enduml
