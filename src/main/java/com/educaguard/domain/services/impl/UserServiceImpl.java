@@ -23,12 +23,15 @@ import java.util.Optional;
 @Service
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    private UserRepository repository;
+    private final UserRepository repository;
 
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     private final int MINUTES_TO_RETRY = 1;
+
+    public UserServiceImpl(UserRepository repository) {
+        this.repository = repository;
+    }
 
     @Transactional(readOnly = false)
     @Override
