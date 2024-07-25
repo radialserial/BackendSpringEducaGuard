@@ -3,15 +3,10 @@ package com.educaguard;
 import com.educaguard.api.dto.password.NewPasswordInputDTO;
 import com.educaguard.domain.domainException.BusinessRulesException;
 import com.educaguard.domain.enums.Roles;
-<<<<<<< HEAD
+
 import com.educaguard.domain.model.User;
 import com.educaguard.domain.repository.UserRepository;
 import com.educaguard.domain.service.impl.UserServiceImpl;
-=======
-import com.educaguard.domain.models.User;
-import com.educaguard.domain.repository.UserRepository;
-import com.educaguard.domain.services.impl.UserServiceImpl;
->>>>>>> 53cf8df674394f66d517d96bdd6fd12695fa8e63
 import com.educaguard.utils.Feedback;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

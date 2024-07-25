@@ -30,10 +30,7 @@ public class UserServiceImpl implements UserService {
     private final int MINUTES_TO_RETRY = 1;
 
     public UserServiceImpl(UserRepository repository) {
-<<<<<<< HEAD:src/main/java/com/educaguard/domain/service/impl/UserServiceImpl.java
-=======
         this.repository = repository;
->>>>>>> 53cf8df674394f66d517d96bdd6fd12695fa8e63:src/main/java/com/educaguard/domain/services/impl/UserServiceImpl.java
     }
 
     @Transactional(readOnly = false)
