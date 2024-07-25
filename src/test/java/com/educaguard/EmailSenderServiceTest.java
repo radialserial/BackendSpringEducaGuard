@@ -1,11 +1,19 @@
 package com.educaguard;
 
 import com.educaguard.domain.domainException.BusinessRulesException;
+<<<<<<< HEAD
 
 import com.educaguard.domain.model.User;
 import com.educaguard.domain.repository.UserRepository;
 import com.educaguard.domain.service.impl.EmailSenderServiceImpl;
 import com.educaguard.utils.Feedback;
+=======
+import com.educaguard.domain.models.User;
+import com.educaguard.domain.repository.UserRepository;
+import com.educaguard.domain.services.impl.EmailSenderServiceImpl;
+import com.educaguard.utils.Feedback;
+import jakarta.mail.MessagingException;
+>>>>>>> 53cf8df674394f66d517d96bdd6fd12695fa8e63
 import jakarta.mail.internet.MimeMessage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
