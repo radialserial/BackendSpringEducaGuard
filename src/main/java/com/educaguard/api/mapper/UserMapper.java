@@ -2,7 +2,7 @@ package com.educaguard.api.mapper;
 
 import com.educaguard.api.dto.user.UserInputDTO;
 import com.educaguard.api.dto.user.UserOutputDTO;
-import com.educaguard.domain.models.User;
+import com.educaguard.domain.model.User;
 import org.modelmapper.ModelMapper;
 
 public class UserMapper {

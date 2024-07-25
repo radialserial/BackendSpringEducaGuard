@@ -1,14 +1,17 @@
-package com.educaguard.api.controllers.login;
+package com.educaguard.api.controller;
+
 import com.educaguard.api.dto.login.LoginInputDTO;
+import com.educaguard.api.dto.login.LoginInputGoogleDTO;
 import com.educaguard.api.dto.login.LoginOutputDTO;
+import com.educaguard.api.dto.others.Message;
 import com.educaguard.api.mapper.LoginMapper;
-import com.educaguard.api.others.Message;
-import com.educaguard.domain.models.User;
-import com.educaguard.domain.services.UserService;
+import com.educaguard.domain.model.User;
+import com.educaguard.domain.service.UserService;
 import com.educaguard.utils.Feedback;
 import com.educaguard.utils.FormatDate;
 import com.educaguard.utils.Log;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +20,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.Date;
 
 @RestController
@@ -93,6 +95,19 @@ public class LoginController {
         return new ResponseEntity<Message>(new Message(Feedback.INVALID_LOGIN), HttpStatus.NOT_ACCEPTABLE);
     }
 
+    @PostMapping("/google")
+    public ResponseEntity<LoginOutputDTO> enterWithGoogle(@RequestBody @Valid LoginInputGoogleDTO loginInputGoogleDTO, HttpServletRequest request) {
+        // creates a log of the login request
+        Log.createGoogleLog(loginInputGoogleDTO, request);
+        User user = LoginMapper.mapperLoginInputGoogleDTOToUser(loginInputGoogleDTO);
+        User loggedInUser = service.loginWithGoogle(user);
+        if (loggedInUser != null && loggedInUser.isStatus()) {
+            // Exist email and password // status is true
+            LoginOutputDTO loginOutputDTO = new LoginOutputDTO(loggedInUser.getIdUser(), loggedInUser.getToken(), loggedInUser.getRole());
+            return new ResponseEntity<LoginOutputDTO>(loginOutputDTO, HttpStatus.ACCEPTED);
+        }
+        return new ResponseEntity<LoginOutputDTO>((LoginOutputDTO) null, HttpStatus.NO_CONTENT);
+    }
 
 
 }

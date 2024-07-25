@@ -1,10 +1,9 @@
 package com.educaguard.api.dto.login;
 
 import com.educaguard.domain.enums.Roles;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter

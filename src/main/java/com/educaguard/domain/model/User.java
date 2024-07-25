@@ -1,13 +1,16 @@
-package com.educaguard.domain.models;
+package com.educaguard.domain.model;
 
 import com.educaguard.domain.enums.Roles;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import javax.validation.constraints.*;
+
+import javax.management.relation.Role;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -49,8 +52,10 @@ public class User implements UserDetails {
     private boolean status;
     @Enumerated(EnumType.STRING)
     private Roles role;
+
     @NotNull
     private int attempts;
+
     private Date releaseLogin;
 
     @Override

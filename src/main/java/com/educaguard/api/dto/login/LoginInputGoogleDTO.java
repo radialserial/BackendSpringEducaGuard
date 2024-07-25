@@ -1,23 +1,19 @@
-package com.educaguard.api.dto.user;
+package com.educaguard.api.dto.login;
+
 import com.educaguard.utils.Field;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
-
-import static com.educaguard.utils.Field.FIRST_LETTER_NAME_MESSAGE;
-
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserInputDTO {
+public class LoginInputGoogleDTO {
 
     @NotBlank(message = Field.NAME_MESSAGE)
     @Size(min = 4, message = Field.NAME_SIZE_MESSAGE)
-    @Pattern(regexp = "^[A-Z]+(.)*", message = FIRST_LETTER_NAME_MESSAGE) // garante que a primeira letra seja maiuscula
     private String name;
 
     @NotBlank(message = Field.USERNAME_MESSAGE)

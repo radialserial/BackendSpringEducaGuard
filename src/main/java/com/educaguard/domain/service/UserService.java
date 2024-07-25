@@ -1,7 +1,8 @@
-package com.educaguard.domain.services;
+package com.educaguard.domain.service;
+
 
 import com.educaguard.api.dto.password.NewPasswordInputDTO;
-import com.educaguard.domain.models.User;
+import com.educaguard.domain.model.User;
 
 import java.util.Date;
 
@@ -12,6 +13,8 @@ public interface UserService {
     public User saveUserAfterConfirmedAccountByEmail(String token);
 
     public User login(User user);
+
+    public User loginWithGoogle(User user);
 
     public User findUser(Long idUser);
 

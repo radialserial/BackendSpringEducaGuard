@@ -1,5 +1,6 @@
 package com.educaguard.utils;
 
+
 import com.educaguard.domain.domainException.BusinessRulesException;
 
 public class StrongPassword {

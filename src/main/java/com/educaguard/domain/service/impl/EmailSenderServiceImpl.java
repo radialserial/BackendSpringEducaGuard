@@ -1,9 +1,9 @@
-package com.educaguard.domain.services.impl;
+package com.educaguard.domain.service.impl;
 
 import com.educaguard.domain.domainException.BusinessRulesException;
-import com.educaguard.domain.models.User;
+import com.educaguard.domain.model.User;
 import com.educaguard.domain.repository.UserRepository;
-import com.educaguard.domain.services.EmailSenderService;
+import com.educaguard.domain.service.EmailSenderService;
 import com.educaguard.security.jwt.JwtToken;
 import com.educaguard.utils.Feedback;
 import jakarta.mail.MessagingException;
@@ -14,6 +14,7 @@ import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+
 import java.util.Base64;
 
 @Service
@@ -46,7 +47,7 @@ public class EmailSenderServiceImpl implements EmailSenderService {
 
             // Use HTML para criar um link estilizado
             String htmlContent = "<p>Por favor, clique no link abaixo para confirmar sua conta!</p>" +
-                    "<p><a href=\"http://localhost:5173/confirmation?token=" + tokenBase64String + "\" style=\"color: #007BFF; text-decoration: none;\">Confirmar!</a></p>";
+                    "<p><a href=\"http://localhost:8080/email/confirmation/" + tokenBase64String + "\" style=\"color: #007BFF; text-decoration: none;\">Confirmar!</a></p>";
             helper.setText(htmlContent, true);
 
             javaMailSender.send(mimeMessage);

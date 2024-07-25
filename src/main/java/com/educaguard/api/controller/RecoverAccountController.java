@@ -1,16 +1,17 @@
-package com.educaguard.api.controllers.recoverAccount;
+package com.educaguard.api.controller;
+
+
+import com.educaguard.api.dto.others.Message;
 import com.educaguard.api.dto.password.NewPasswordInputDTO;
-import com.educaguard.api.others.Message;
-import com.educaguard.domain.services.EmailSenderService;
-import com.educaguard.domain.services.UserService;
+import com.educaguard.domain.service.EmailSenderService;
+import com.educaguard.domain.service.UserService;
 import com.educaguard.utils.Feedback;
 import com.educaguard.utils.StrongPassword;
+import jakarta.validation.constraints.Email;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.constraints.Email;
 
 @RestController
 @RequestMapping("/recover")

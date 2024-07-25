@@ -1,11 +1,12 @@
-package com.educaguard.domain.services.impl;
+package com.educaguard.domain.service.impl;
+
 
 import com.educaguard.api.dto.password.NewPasswordInputDTO;
 import com.educaguard.domain.domainException.BusinessRulesException;
 import com.educaguard.domain.enums.Roles;
-import com.educaguard.domain.models.User;
+import com.educaguard.domain.model.User;
 import com.educaguard.domain.repository.UserRepository;
-import com.educaguard.domain.services.UserService;
+import com.educaguard.domain.service.UserService;
 import com.educaguard.security.jwt.JwtToken;
 import com.educaguard.utils.Feedback;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -29,6 +29,9 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     private final int MINUTES_TO_RETRY = 1;
+
+    public UserServiceImpl(UserRepository repository) {
+    }
 
     @Transactional(readOnly = false)
     @Override
@@ -67,6 +70,26 @@ public class UserServiceImpl implements UserService {
         user.setAttempts(0);
         user.setReleaseLogin(null);
         return repository.save(user);
+    }
+
+    @Transactional(readOnly = false)
+    @Override
+    public User loginWithGoogle(User user) {
+        User userLoginWithGoogle = repository.findAccountGoogleByEmail(user.getEmail());
+        if (userLoginWithGoogle == null) {
+            // empty user
+            String firstTokenUser = JwtToken.generateTokenJWT(user);
+            user.setToken(firstTokenUser);
+            user.setStatus(true);
+            user.setRole(Roles.ROLE_USER);
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            return repository.save(user);
+        } else if (passwordEncoder.matches(user.getPassword(), userLoginWithGoogle.getPassword())) {
+            // exist user. Update Token
+            userLoginWithGoogle.setToken(JwtToken.generateTokenJWT(userLoginWithGoogle));
+            return repository.save(userLoginWithGoogle);
+        }
+        throw new BusinessRulesException(Feedback.INVALID_LOGIN_BY_GOOGLE);
     }
 
     @Transactional(readOnly = true)

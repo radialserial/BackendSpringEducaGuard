@@ -11,8 +11,6 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.educaguard.utils.Field.DEFAULT_MESSAGE_EXCEPTION;
-
 @ControllerAdvice
 public class ApiExceptionHandler {
 
@@ -41,7 +39,7 @@ public class ApiExceptionHandler {
         var status = HttpStatus.BAD_REQUEST;
 
         var problema = new Problem();
-        problema.setTitle(DEFAULT_MESSAGE_EXCEPTION);
+        problema.setTitle(com.educaguard.utils.Field.DEFAULT_MESSAGE_EXCEPTION);
         problema.setDate(OffsetDateTime.now());
         problema.setStatus(status.value());
         problema.setList(list);

@@ -1,4 +1,4 @@
-package com.educaguard.domain.services.impl;
+package com.educaguard.domain.service.impl;
 
 import com.educaguard.domain.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

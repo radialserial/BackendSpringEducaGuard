@@ -1,4 +1,4 @@
-package com.educaguard.api.others;
+package com.educaguard.api.dto.others;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
