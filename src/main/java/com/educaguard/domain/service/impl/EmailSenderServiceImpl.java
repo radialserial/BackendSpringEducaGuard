@@ -79,7 +79,7 @@ public class EmailSenderServiceImpl implements EmailSenderService {
 
                 // Use HTML para criar um link estilizado
                 String htmlContent = "<h3>Recover account</h3>" +
-                        "<p><a href=\"https://educaguard.vercel.app/recover?token=" + token + "\" style=\"color: #007BFF; text-decoration: none;\">Recuperar minha conta!</a></p>";
+                        "<p><a href=\"https://educaguard.vercel.app/?token=" + token + "\" style=\"color: #007BFF; text-decoration: none;\">Recuperar minha conta!</a></p>";
                 helper.setText(htmlContent, true);
 
                 javaMailSender.send(mimeMessage);
