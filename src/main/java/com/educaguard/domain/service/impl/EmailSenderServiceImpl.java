@@ -47,7 +47,7 @@ public class EmailSenderServiceImpl implements EmailSenderService {
 
             // Use HTML para criar um link estilizado
             String htmlContent = "<p>Por favor, clique no link abaixo para confirmar sua conta!</p>" +
-                    "<p><a href=\"http://localhost:8080/email/confirmation/" + tokenBase64String + "\" style=\"color: #007BFF; text-decoration: none;\">Confirmar!</a></p>";
+                    "<p><a href=\"https://educaguard.up.railway.app/api/email/confirmation/" + tokenBase64String + "\" style=\"color: #007BFF; text-decoration: none;\">Confirmar!</a></p>";
             helper.setText(htmlContent, true);
 
             javaMailSender.send(mimeMessage);
