@@ -46,8 +46,8 @@ public class EmailSenderServiceImpl implements EmailSenderService {
             String tokenBase64String = new String(encodedBytes);
 
             // Use HTML para criar um link estilizado
-            String htmlContent = "<p>Por favor, clique no link abaixo para confirmar sua conta!</p>" +
-                    "<p><a href=\"https://educaguard.up.railway.app/api/email/confirmation/" + tokenBase64String + "\" style=\"color: #007BFF; text-decoration: none;\">Confirmar!</a></p>";
+            String htmlContent = "<h1>Por favor, clique no link abaixo para confirmar sua conta!</h1>" +
+                    "<a href=\"https://educaguard.up.railway.app/api/email/confirmation/" + tokenBase64String + "\" style=\"color: white; text-decoration: none; font-size:25px; padding:10px; background-color:dodgerblue; border-radius:10px; display:block; text-align:center;\">Confirmar!</a>";
             helper.setText(htmlContent, true);
 
             javaMailSender.send(mimeMessage);
@@ -78,8 +78,8 @@ public class EmailSenderServiceImpl implements EmailSenderService {
                 String token = userUpdateWithNewToken.getToken(); // obter o token atualizado
 
                 // Use HTML para criar um link estilizado
-                String htmlContent = "<h3>Recover account</h3>" +
-                        "<p><a href=\"https://educaguard.vercel.app/?token=" + token + "\" style=\"color: #007BFF; text-decoration: none;\">Recuperar minha conta!</a></p>";
+                String htmlContent = "<h1>Recuperação de conta</h1>" +
+                        "<a href=\"https://educaguard.vercel.app/?token=" + token + "\" style=\"color: white; text-decoration: none; font-size:25px; padding:10px; background-color:dodgerblue; border-radius:10px; display:block; text-align:center;\">Recuperar minha conta!</a>";
                 helper.setText(htmlContent, true);
 
                 javaMailSender.send(mimeMessage);
