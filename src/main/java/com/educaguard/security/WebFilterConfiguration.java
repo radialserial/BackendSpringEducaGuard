@@ -29,18 +29,10 @@ public class WebFilterConfiguration {
 
 	@Bean
 	public CorsConfigurationSource corsConfigurationSource() {
-
 		CorsConfiguration configuration = new CorsConfiguration();
-		configuration.addAllowedOrigin("*"); // Permite todas as origens, você pode personalizar isso
-		// Methods http authorized
-		configuration.addAllowedMethod("GET");
-		configuration.addAllowedMethod("POST");
-		configuration.addAllowedMethod("PUT");
-		configuration.addAllowedMethod("DELETE");
-		configuration.addAllowedMethod("OPTIONS");
-		// Headers http authorized
-		configuration.addAllowedHeader("Authorization");
-		configuration.addAllowedHeader("Content-Type");
+		configuration.addAllowedOrigin("*"); // Permite todas as origens
+		configuration.addAllowedMethod("*"); // Permite todos os métodos HTTP
+		configuration.addAllowedHeader("*"); // Permite todos os cabeçalhos
 
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", configuration);
@@ -49,27 +41,18 @@ public class WebFilterConfiguration {
 	}
 
 	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception
-	{
-		http.cors(); // cross origin resource sharing (compartilhamento de recursos de origens cruzadas)
+	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+		http.cors().configurationSource(corsConfigurationSource()); // Aplica a configuração CORS
 
-		http.csrf(AbstractHttpConfigurer::disable); // Habilita a segurança contra ataques csrf (Cross-site request forgery)
-
-		http.formLogin(AbstractHttpConfigurer::disable); // Desabilita formulários de login html
-
-		http.httpBasic(AbstractHttpConfigurer::disable);
-
+		http.csrf(AbstractHttpConfigurer::disable); // Desativa CSRF
 		http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)); // Sem sessões
 
-		http.authorizeHttpRequests((auth) -> auth
-				// Login Controller
+		http.authorizeHttpRequests(auth -> auth
+				// Permissões para outros endpoints
 				.requestMatchers(HttpMethod.POST, "/login/*").permitAll()
-				// Email Controller
 				.requestMatchers(HttpMethod.GET, "/email/confirmation/*").permitAll()
-				// Recover Account Controller
 				.requestMatchers(HttpMethod.GET, "/recover/recover-account/*").permitAll()
 				.requestMatchers(HttpMethod.POST, "/recover/new-password").permitAll()
-				// User Controller
 				.requestMatchers(HttpMethod.POST, "/user/new").permitAll()
 				.requestMatchers(HttpMethod.GET, "/user/find/*").hasAuthority(Roles.ROLE_USER.name())
 				.anyRequest().authenticated());
@@ -85,9 +68,7 @@ public class WebFilterConfiguration {
 	}
 
 	@Bean
-	public PasswordEncoder passwordEncoder(){
+	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
-
-
 }
