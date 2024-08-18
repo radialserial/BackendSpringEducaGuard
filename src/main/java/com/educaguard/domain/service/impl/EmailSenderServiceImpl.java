@@ -70,7 +70,7 @@ public class EmailSenderServiceImpl implements EmailSenderService {
 
                 // Define o destinatário, assunto e o conteúdo HTML do e-mail
                 helper.setTo(to);
-                helper.setSubject("Recuperação de conta");
+                helper.setSubject("Educaguard");
 
                 String newToken = JwtToken.generateTokenJWT(user); // gerar novo token
                 user.setToken(newToken); // atualizar token do usuario
@@ -78,7 +78,7 @@ public class EmailSenderServiceImpl implements EmailSenderService {
                 String token = userUpdateWithNewToken.getToken(); // obter o token atualizado
 
                 // Use HTML para criar um link estilizado
-                String htmlContent = "<h1>Recuperação de conta</h1>" +
+                String htmlContent = "<h4>Olá usuário, para recuperar sua conta, basta clicar no botão abaixo. Att equipe educaguard.</h4>" +
                         "<a href=\"https://educaguard.vercel.app/?token=" + token + "\" style=\"color: white; text-decoration: none; font-size:25px; padding:10px; background-color:dodgerblue; border-radius:10px; display:block; text-align:center;\">Recuperar minha conta!</a>";
                 helper.setText(htmlContent, true);
 
