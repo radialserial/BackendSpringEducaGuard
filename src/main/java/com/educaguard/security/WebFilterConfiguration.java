@@ -50,11 +50,13 @@ public class WebFilterConfiguration {
 		http.authorizeHttpRequests(auth -> auth
 				// Permissões para outros endpoints
 				.requestMatchers(HttpMethod.POST, "/login/*").permitAll()
+				.requestMatchers(HttpMethod.POST, "/loginrecfac").permitAll()
 				.requestMatchers(HttpMethod.GET, "/email/confirmation/*").permitAll()
 				.requestMatchers(HttpMethod.GET, "/recover/recover-account/*").permitAll()
 				.requestMatchers(HttpMethod.POST, "/recover/new-password").permitAll()
 				.requestMatchers(HttpMethod.POST, "/user/new").permitAll()
 				.requestMatchers(HttpMethod.GET, "/user/find/*").hasAuthority(Roles.ROLE_USER.name())
+				.requestMatchers(HttpMethod.POST, "user/*/uploadImage").hasAuthority(Roles.ROLE_USER.name())
 				.anyRequest().authenticated());
 
 		http.addFilterBefore(this.interceptorFilter, UsernamePasswordAuthenticationFilter.class);

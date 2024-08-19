@@ -16,6 +16,7 @@
     <description>Backend do sistema EducaGuard</description>
     <properties>
         <java.version>17</java.version>
+        <aws.java.sdk.version>2.20.43</aws.java.sdk.version>
     </properties>
     <dependencies>
         <dependency>
@@ -95,6 +96,13 @@
             <groupId>javax.validation</groupId>
             <artifactId>validation-api</artifactId>
             <version>2.0.1.Final</version>
+        </dependency>
+
+        <!-- AWS -->
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-s3</artifactId>
+            <version>1.12.769</version>
         </dependency>
 
     </dependencies>
