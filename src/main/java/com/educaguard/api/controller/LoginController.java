@@ -1,11 +1,13 @@
 package com.educaguard.api.controller;
 
+import com.amazonaws.services.rekognition.model.InvalidS3ObjectException;
 import com.educaguard.api.dto.login.LoginInputDTO;
 import com.educaguard.api.dto.login.LoginInputGoogleDTO;
 import com.educaguard.api.dto.login.LoginOutputDTO;
 import com.educaguard.api.dto.others.Message;
 import com.educaguard.api.mapper.LoginMapper;
 import com.educaguard.domain.model.User;
+import com.educaguard.domain.service.AwsService;
 import com.educaguard.domain.service.UserService;
 import com.educaguard.utils.Feedback;
 import com.educaguard.utils.FormatDate;
@@ -19,6 +21,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
 
@@ -30,8 +33,11 @@ public class LoginController {
     private UserService service;
 
     @Autowired
+    private AwsService awsService;
+
+    @Autowired
     public AuthenticationManager authenticationManager;
-    private final int MAX_ATTEMPTS = 3;
+    private final int MAX_ATTEMPTS = 5;
 
     @PostMapping("/enter")
     public ResponseEntity<?> enter(@RequestBody @Valid LoginInputDTO loginInputDTO, HttpServletRequest request) {
@@ -41,7 +47,6 @@ public class LoginController {
         Log.createSimpleLog(loginInputDTO, request);
 
         if (service.findUser(loginInputDTO.getUsername())) {
-
             if (service.attemptsUser(loginInputDTO.getUsername()) < MAX_ATTEMPTS) {
                 return processLogin(loginInputDTO);
             } else {
@@ -74,10 +79,50 @@ public class LoginController {
         return new ResponseEntity<Message>(message, HttpStatus.NOT_ACCEPTABLE);
     }
 
+    @PostMapping("/{username}/recfacial")
+    public ResponseEntity<?> enter(@PathVariable String username, @RequestParam("file") MultipartFile file, HttpServletRequest request) {
+        Message message = new Message();
+
+        // creates a log of the login request
+        Log.createSimpleLogRecFacial(username, request);
+
+        if (service.findUser(username)) {
+            if (service.attemptsUser(username) < MAX_ATTEMPTS) {
+                return processLoginRecFacial(username, file);
+            } else {
+                // At this point, we know that the allowed number of attempts has been exceeded
+                // check if there is a waiting date for a new login attempt
+                if (service.verifyReleaseDateLogin(username)) {
+
+                    // there is a lockout date for login
+                    Date releaseDate = service.getDateReleaseLogin(username);
+
+                    // check if it is still valid
+                    if (releaseDate.after(new Date(System.currentTimeMillis()))) {
+                        // if it is not expired yet
+                        message.setMessage(Feedback.NEW_ATTEMPT + FormatDate.formatMyDate(releaseDate));
+                        return new ResponseEntity<Message>(message, HttpStatus.LOCKED);
+                    } else {
+                        // time expired
+                        service.resetAttemptsAndReleaseLogin(username);
+                        return processLoginRecFacial(username, file);
+                    }
+                } else {
+                    // If it doesn't exist, add the waiting time for a new login attempt for this user
+                    Date releaseDate = service.releaseLogin(username);
+                    message.setMessage(Feedback.EXHAUSTED_ATTEMPTS + FormatDate.formatMyDate(releaseDate));
+                    return new ResponseEntity<Message>(message, HttpStatus.LOCKED);
+                }
+            }
+        }
+        message.setMessage(Feedback.INVALID_LOGIN);
+        return new ResponseEntity<Message>(message, HttpStatus.NOT_ACCEPTABLE);
+    }
+
     private ResponseEntity<?> processLogin(LoginInputDTO loginInputDTO) {
         try {
-            var usernamePassword = new UsernamePasswordAuthenticationToken(loginInputDTO.getUsername(), loginInputDTO.getPassword());
-            var auth = authenticationManager.authenticate(usernamePassword);
+            var authenticationToken = new UsernamePasswordAuthenticationToken(loginInputDTO.getUsername(), loginInputDTO.getPassword());
+            var auth = authenticationManager.authenticate(authenticationToken);
             // check login
             if (auth.isAuthenticated()) {
                 // register login
@@ -90,6 +135,26 @@ public class LoginController {
         } catch (AuthenticationException e) {
             // increment attempts
             service.updateAttempts(loginInputDTO.getUsername());
+        }
+
+        return new ResponseEntity<Message>(new Message(Feedback.INVALID_LOGIN), HttpStatus.NOT_ACCEPTABLE);
+    }
+
+    private ResponseEntity<?> processLoginRecFacial(String username, MultipartFile file) {
+        try {
+            // check login
+            if (awsService.faceMatch(username, file)) {
+                // register login
+                User loggedInUser = service.loginRecFacial(username);
+                if (loggedInUser.isStatus()) {
+                    // User active
+                    return new ResponseEntity<LoginOutputDTO>(LoginMapper.mapperUserToLoginOutputDTO(loggedInUser), HttpStatus.ACCEPTED);
+                }
+            }
+        } catch (InvalidS3ObjectException e) {
+            // increment attempts
+            service.updateAttempts(username);
+            return new ResponseEntity<Message>(new Message(Feedback.INVALID_LOGIN_NO_IMAGE_FIND), HttpStatus.NOT_ACCEPTABLE);
         }
 
         return new ResponseEntity<Message>(new Message(Feedback.INVALID_LOGIN), HttpStatus.NOT_ACCEPTABLE);
