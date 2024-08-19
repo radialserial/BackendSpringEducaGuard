@@ -4,6 +4,7 @@ public class Feedback {
 
     // Login
     public static final String INVALID_LOGIN = "Login inválido!";
+    public static final String INVALID_LOGIN_NO_IMAGE_FIND = "Login inválido! Sua imagem não está cadastrada!";
     public static final String INVALID_LOGIN_BY_GOOGLE = "Erro ao realizar login com google!";
     public static final String NEW_ATTEMPT = "Faça uma nova tentativa em ";
     public static final String EXHAUSTED_ATTEMPTS = "Número de tentativas esgotado, faça uma nova tentativa em '";

@@ -50,7 +50,7 @@ public class WebFilterConfiguration {
 		http.authorizeHttpRequests(auth -> auth
 				// Permissões para outros endpoints
 				.requestMatchers(HttpMethod.POST, "/login/*").permitAll()
-				.requestMatchers(HttpMethod.POST, "/loginrecfac").permitAll()
+				.requestMatchers(HttpMethod.POST, "/login/*/recfacial").permitAll()
 				.requestMatchers(HttpMethod.GET, "/email/confirmation/*").permitAll()
 				.requestMatchers(HttpMethod.GET, "/recover/recover-account/*").permitAll()
 				.requestMatchers(HttpMethod.POST, "/recover/new-password").permitAll()
