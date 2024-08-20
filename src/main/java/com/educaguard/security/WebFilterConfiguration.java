@@ -52,17 +52,11 @@ public class WebFilterConfiguration {
 		http.authorizeHttpRequests(auth -> auth
 				// Permissões para outros endpoints
 				.requestMatchers(HttpMethod.POST, "/login/*").permitAll()
-				.requestMatchers(HttpMethod.POST, "/login/*/recfacial").permitAll()
 				.requestMatchers(HttpMethod.GET, "/email/confirmation/*").permitAll()
 				.requestMatchers(HttpMethod.GET, "/recover/recover-account/*").permitAll()
 				.requestMatchers(HttpMethod.POST, "/recover/new-password").permitAll()
 
-				.requestMatchers(HttpMethod.POST, "/user/new").hasAnyAuthority(
-						Roles.ROLE_ADMIN.name(),
-						Roles.ROLE_ESTUDANTE.name(),
-						Roles.ROLE_OPERADOR_MONITORAMENTO.name(),
-						Roles.ROLE_PROFESSOR.name()
-				)
+				.requestMatchers(HttpMethod.POST, "/user/new").hasAuthority(Roles.ROLE_ADMIN.name())
 				.requestMatchers(HttpMethod.GET, "/user/find/*")
 				.hasAnyAuthority(
 						Roles.ROLE_ADMIN.name(),
@@ -71,7 +65,6 @@ public class WebFilterConfiguration {
 						Roles.ROLE_PROFESSOR.name()
 				)
 
-				.requestMatchers(HttpMethod.POST, "/user/new").permitAll()
 				.requestMatchers(HttpMethod.POST, "user/*/uploadImage").hasAnyAuthority(
 						Roles.ROLE_ADMIN.name(),
 						Roles.ROLE_OPERADOR_MONITORAMENTO.name()
