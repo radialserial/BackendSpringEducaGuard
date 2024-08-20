@@ -74,7 +74,7 @@ public class User implements UserDetails {
 
         if (this.role == Roles.ROLE_OPERADOR_MONITORAMENTO) {
             // se esse usuário tiver uma role de user, retornamos o tipo de acesso que ele pode ter no sistema, nesse caso apenas user
-            return List.of(new SimpleGrantedAuthority("OPERADOR_MONITORAMENTO"));
+            return List.of(new SimpleGrantedAuthority("ROLE_OPERADOR_MONITORAMENTO"));
         }
 
         else {
