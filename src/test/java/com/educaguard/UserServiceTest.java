@@ -60,7 +60,7 @@ public class UserServiceTest {
         assertNotNull(savedUser);
         assertNotNull(savedUser.getToken());
         assertFalse(savedUser.isStatus());
-        assertEquals(Roles.ROLE_USER, savedUser.getRole());
+        assertEquals(Roles.ROLE_ESTUDANTE, savedUser.getRole());
         verify(repository, times(1)).save(user);
     }
 
