@@ -14,6 +14,8 @@ public interface UserService {
 
     public User login(User user);
 
+    public User loginRecFacial(String username);
+
     public User loginWithGoogle(User user);
 
     public User findUser(Long idUser);

@@ -9,7 +9,6 @@ import com.educaguard.domain.repository.UserRepository;
 import com.educaguard.domain.service.UserService;
 import com.educaguard.security.jwt.JwtToken;
 import com.educaguard.utils.Feedback;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -75,6 +74,16 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = false)
     @Override
     public User login(User user) {
+        user.setToken(JwtToken.generateTokenJWT(user));
+        user.setAttempts(0);
+        user.setReleaseLogin(null);
+        return repository.save(user);
+    }
+
+    @Transactional(readOnly = false)
+    @Override
+    public User loginRecFacial(String username) {
+        User user = repository.findUserByUsername(username);
         user.setToken(JwtToken.generateTokenJWT(user));
         user.setAttempts(0);
         user.setReleaseLogin(null);
