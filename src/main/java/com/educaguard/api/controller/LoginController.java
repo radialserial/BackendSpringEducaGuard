@@ -1,6 +1,7 @@
 package com.educaguard.api.controller;
 
 import com.amazonaws.services.rekognition.model.InvalidS3ObjectException;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.educaguard.api.dto.login.LoginInputDTO;
 import com.educaguard.api.dto.login.LoginInputGoogleDTO;
 import com.educaguard.api.dto.login.LoginOutputDTO;
@@ -9,6 +10,7 @@ import com.educaguard.api.mapper.LoginMapper;
 import com.educaguard.domain.model.User;
 import com.educaguard.domain.service.AwsService;
 import com.educaguard.domain.service.UserService;
+import com.educaguard.security.jwt.JwtToken;
 import com.educaguard.utils.Feedback;
 import com.educaguard.utils.FormatDate;
 import com.educaguard.utils.Log;
@@ -38,6 +40,14 @@ public class LoginController {
     @Autowired
     public AuthenticationManager authenticationManager;
     private final int MAX_ATTEMPTS = 5;
+
+    @PostMapping("/validate")
+    public ResponseEntity<?> validate(@RequestBody String jwt, HttpServletRequest request) {
+        if (JwtToken.decodeTokenJWT(jwt) != null)
+            return new ResponseEntity<>(null, HttpStatus.OK);
+
+        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+    }
 
     @PostMapping("/enter")
     public ResponseEntity<?> enter(@RequestBody @Valid LoginInputDTO loginInputDTO, HttpServletRequest request) {
