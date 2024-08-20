@@ -72,7 +72,7 @@ public class Log {
             ipClient = xForwardedForHeader.split(",")[0].trim();
         }
 
-        return "Date: " + date.getTime() + ", IP: " + ipClient + ", Browser: " + browserClient + ", SO: " + so + " -> Login = [username: " + loginInputDTO.getUsername() + ", password: " + loginInputDTO.getPassword() + "]\n";
+        return "Date: " + date.getTime() + ", IP: " + ipClient + ", Browser: " + browserClient + ", SO: " + so + " -> Login = [username: " + loginInputDTO.getUsername() + ", password: CONFIDENCIAL]";
 
     }
 
@@ -104,7 +104,7 @@ public class Log {
             ipClient = xForwardedForHeader.split(",")[0].trim();
         }
 
-        return "Date: " + date.getTime() + ", IP: " + ipClient + ", Browser: " + browserClient + ", SO: " + so + " -> LoginGoogle = [name: " + loginInputGoogleDTO.getName() + ", email: " + loginInputGoogleDTO.getEmail() + ", username: " + loginInputGoogleDTO.getUsername() + ", password: " + loginInputGoogleDTO.getPassword() + "]\n";
+        return "Date: " + date.getTime() + ", IP: " + ipClient + ", Browser: " + browserClient + ", SO: " + so + " -> LoginGoogle = [name: " + loginInputGoogleDTO.getName() + ", email: " + loginInputGoogleDTO.getEmail() + ", username: " + loginInputGoogleDTO.getUsername() + ", password: CONFIDENCIAL]";
 
     }
 

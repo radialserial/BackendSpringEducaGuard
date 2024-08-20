@@ -20,6 +20,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.List;
+
 @Configuration
 @EnableWebSecurity
 public class WebFilterConfiguration {
@@ -53,8 +55,19 @@ public class WebFilterConfiguration {
 				.requestMatchers(HttpMethod.GET, "/email/confirmation/*").permitAll()
 				.requestMatchers(HttpMethod.GET, "/recover/recover-account/*").permitAll()
 				.requestMatchers(HttpMethod.POST, "/recover/new-password").permitAll()
-				.requestMatchers(HttpMethod.POST, "/user/new").permitAll()
-				.requestMatchers(HttpMethod.GET, "/user/find/*").hasAuthority(Roles.ROLE_USER.name())
+				.requestMatchers(HttpMethod.POST, "/user/new").hasAnyAuthority(
+						Roles.ROLE_ADMIN.name(),
+						Roles.ROLE_ESTUDANTE.name(),
+						Roles.ROLE_OPERADOR_MONITORAMENTO.name(),
+						Roles.ROLE_PROFESSOR.name()
+				)
+				.requestMatchers(HttpMethod.GET, "/user/find/*")
+				.hasAnyAuthority(
+						Roles.ROLE_ADMIN.name(),
+						Roles.ROLE_ESTUDANTE.name(),
+						Roles.ROLE_OPERADOR_MONITORAMENTO.name(),
+						Roles.ROLE_PROFESSOR.name()
+				)
 				.anyRequest().authenticated());
 
 		http.addFilterBefore(this.interceptorFilter, UsernamePasswordAuthenticationFilter.class);

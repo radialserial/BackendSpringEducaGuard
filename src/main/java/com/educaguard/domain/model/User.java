@@ -37,15 +37,9 @@ public class User implements UserDetails {
     @Size(min = 6)
     private String password;
     @NotBlank
-    @Column(columnDefinition = "text")
-    private String about;
-    @NotBlank
     @Email
     @Column(unique = true)
     private String email;
-    @NotBlank
-    @Column(columnDefinition = "text")
-    private String image;
     @Column(columnDefinition = "text")
     private String token;
     @Column(nullable = false)
@@ -62,15 +56,31 @@ public class User implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if (this.role == Roles.ROLE_ADMIN) {
             // se esse usuário tiver uma role de admin, retornamos os tipos de acesso que ele pode ter no sistema, nesse caso admin e user
-            return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
+            return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"),
+                    new SimpleGrantedAuthority("ROLE_ESTUDANTE"),
+                    new SimpleGrantedAuthority("ROLE_PROFESSOR"),
+                    new SimpleGrantedAuthority("OPERADOR_MONITORAMENTO)"));
         }
 
-        if (this.role == Roles.ROLE_USER) {
+        if (this.role == Roles.ROLE_ESTUDANTE) {
             // se esse usuário tiver uma role de user, retornamos o tipo de acesso que ele pode ter no sistema, nesse caso apenas user
-            return List.of(new SimpleGrantedAuthority("ROLE_USER"));
-        } else {
+            return List.of(new SimpleGrantedAuthority("ROLE_ESTUDANTE"));
+        }
+
+        if (this.role == Roles.ROLE_PROFESSOR) {
+            // se esse usuário tiver uma role de user, retornamos o tipo de acesso que ele pode ter no sistema, nesse caso apenas user
+            return List.of(new SimpleGrantedAuthority("ROLE_PROFESSOR"));
+        }
+
+        if (this.role == Roles.ROLE_OPERADOR_MONITORAMENTO) {
+            // se esse usuário tiver uma role de user, retornamos o tipo de acesso que ele pode ter no sistema, nesse caso apenas user
+            return List.of(new SimpleGrantedAuthority("OPERADOR_MONITORAMENTO"));
+        }
+
+        else {
             return null;
         }
+
     }
 
     @Override

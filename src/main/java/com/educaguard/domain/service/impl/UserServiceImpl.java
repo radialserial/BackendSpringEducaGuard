@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -27,7 +28,12 @@ public class UserServiceImpl implements UserService {
 
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    private final int MINUTES_TO_RETRY = 1;
+    private final int MINUTES_TO_RETRY = 30;
+
+    private List<Roles> rolesList = List.of(Roles.valueOf(Roles.ROLE_ESTUDANTE.name()),
+            Roles.valueOf(Roles.ROLE_PROFESSOR.name()),
+            Roles.valueOf(Roles.ROLE_ADMIN.name()),
+            Roles.valueOf(Roles.ROLE_OPERADOR_MONITORAMENTO.name()));
 
     public UserServiceImpl(UserRepository repository) {
         this.repository = repository;
@@ -36,12 +42,15 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = false)
     @Override
     public User save(User user) {
+
+        if(!rolesList.contains(user.getRole()))
+            throw new BusinessRulesException("Role inválida!");
+
         if (repository.findUserByEmail(user.getEmail()) == null && repository.findUserByUsername(user.getUsername()) == null) {
             // empty user
             String firstTokenUser = JwtToken.generateTokenJWT(user);
             user.setToken(firstTokenUser);
             user.setStatus(false);
-            user.setRole(Roles.ROLE_USER);
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             User userSaved = repository.save(user);
             if(userSaved.getIdUser() == null){
@@ -75,13 +84,16 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = false)
     @Override
     public User loginWithGoogle(User user) {
+
+        if(!rolesList.contains(user.getRole()))
+            throw new BusinessRulesException("Role inválida!");
+
         User userLoginWithGoogle = repository.findAccountGoogleByEmail(user.getEmail());
         if (userLoginWithGoogle == null) {
             // empty user
             String firstTokenUser = JwtToken.generateTokenJWT(user);
             user.setToken(firstTokenUser);
             user.setStatus(true);
-            user.setRole(Roles.ROLE_USER);
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             return repository.save(user);
         } else if (passwordEncoder.matches(user.getPassword(), userLoginWithGoogle.getPassword())) {

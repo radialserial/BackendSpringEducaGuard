@@ -1,9 +1,7 @@
 package com.educaguard.api.dto.user;
+import com.educaguard.domain.enums.Roles;
 import com.educaguard.utils.Field;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.*;
 
 import static com.educaguard.utils.Field.FIRST_LETTER_NAME_MESSAGE;
@@ -27,14 +25,11 @@ public class UserInputDTO {
     @Size(min = 6, message = Field.PASSWORD_SIZE_MESSAGE)
     private String password;
 
-    @NotBlank(message = Field.ABOUT_MESSAGE)
-    private String about;
-
     @NotBlank(message = Field.EMAIL_MESSAGE)
     @Email(message = Field.EMAIL_VALID_MESSAGE)
     private String email;
 
-    @NotBlank(message = Field.PHOTO_MESSAGE)
-    private String image;
+    @NotNull(message = "Informe a role do novo usuário!")
+    private Roles role;
 
 }
